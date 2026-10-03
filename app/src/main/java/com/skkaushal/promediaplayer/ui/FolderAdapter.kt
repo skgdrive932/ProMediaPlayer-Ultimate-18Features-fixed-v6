@@ -6,6 +6,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.skkaushal.promediaplayer.R
 import com.skkaushal.promediaplayer.databinding.ItemFolderBinding
 import com.skkaushal.promediaplayer.model.FolderModel
+import java.util.Locale
 
 class FolderAdapter(
     private val folderList: List<FolderModel>,
@@ -30,17 +31,30 @@ class FolderAdapter(
         // Folder name set karna
         holder.binding.tvFolderName.text = folder.name
 
-        // File count mapping (Symbian item_folder.xml ke ID ke hisab se)
-        holder.binding.tvItemCount.text = "${folder.mediaList.size} Files"
+        // Folder ki total size calculate karke format karna
+        val totalSizeBytes = folder.mediaList.sumOf { it.size }
+        val formattedSize = formatFileSize(totalSizeBytes)
 
-        // Retro Symbian 3D Icon set karna
+        // File count aur total size dikhana (e.g. "18 Files • 1.2 GB")
+        holder.binding.tvItemCount.text = "${folder.mediaList.size} Files • $formattedSize"
+
+        // Symbian 3D Icon set karna
         holder.binding.imgFolderIcon.setImageResource(R.drawable.bg_icon_3d)
 
-        // Item click listener
+        // Click listener
         holder.binding.root.setOnClickListener {
             onFolderClick(folder)
         }
     }
 
     override fun getItemCount(): Int = folderList.size
+
+    // Helper Function: Bytes ko B, KB, MB, GB mein format karne ke liye
+    private fun formatFileSize(sizeInBytes: Long): String {
+        if (sizeInBytes <= 0) return "0 B"
+        val units = arrayOf("B", "KB", "MB", "GB", "TB")
+        val digitGroups = (Math.log10(sizeInBytes.toDouble()) / Math.log10(1024.0)).toInt()
+        val size = sizeInBytes / Math.pow(1024.0, digitGroups.toDouble())
+        return String.format(Locale.US, "%.1f %s", size, units[digitGroups])
+    }
 }
