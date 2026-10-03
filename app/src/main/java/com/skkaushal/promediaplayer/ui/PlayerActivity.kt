@@ -135,7 +135,6 @@ class PlayerActivity : AppCompatActivity() {
                     }
                 })
 
-                // Let Media3 choose the correct extractor/decoder for the local MediaStore URI.
                 setMediaItem(MediaItem.fromUri(mediaUri))
                 prepare()
                 playWhenReady = true
@@ -200,7 +199,17 @@ class PlayerActivity : AppCompatActivity() {
     }
 
     private fun setupGestures() {
+        var initialVolume = 0
+        var initialBrightness = 0.5f
+
         val gestureDetector = GestureDetector(this, object : GestureDetector.SimpleOnGestureListener() {
+            override fun onDown(e: MotionEvent): Boolean {
+                // Touch start hone par baseline volume aur brightness save kar rahe hain
+                initialVolume = audioManager.getStreamVolume(AudioManager.STREAM_MUSIC)
+                initialBrightness = currentBrightness
+                return true
+            }
+
             override fun onSingleTapConfirmed(e: MotionEvent): Boolean {
                 if (locked) {
                     locked = false
@@ -226,7 +235,9 @@ class PlayerActivity : AppCompatActivity() {
                 if (locked || e1 == null || player == null) return false
                 val width = binding.playerView.width.coerceAtLeast(1)
                 val height = binding.playerView.height.coerceAtLeast(1)
+
                 if (abs(distanceX) > abs(distanceY)) {
+                    // Horizontal Scroll: Seek Forward / Backward
                     val delta = (-distanceX / width * 90_000L).toLong()
                     player?.let { p ->
                         val duration = p.duration
@@ -234,16 +245,21 @@ class PlayerActivity : AppCompatActivity() {
                     }
                     showStatus("${if (distanceX < 0) ">>" else "<<"} ${formatTime(player?.currentPosition ?: 0L)}")
                 } else {
-                    val delta = (e1.y - e2.y) / height
+                    // Vertical Scroll: Brightness (Left) aur Volume (Right)
+                    val deltaRatio = (e1.y - e2.y) / height
+                    val sensitivity = 0.35f // Sensitivity dampener (gesture ko slow aur smooth rakhne ke liye)
+
                     if (e1.x < width / 2f) {
-                        currentBrightness = (currentBrightness + delta).coerceIn(0.05f, 1f)
+                        // Left Side: Smooth Brightness Control
+                        currentBrightness = (initialBrightness + (deltaRatio * sensitivity)).coerceIn(0.05f, 1f)
                         val lp = window.attributes
                         lp.screenBrightness = currentBrightness
                         window.attributes = lp
                         showStatus("Brightness ${(currentBrightness * 100).toInt()}%")
                     } else {
-                        val current = audioManager.getStreamVolume(AudioManager.STREAM_MUSIC)
-                        val next = (current + (delta * maxVolume).toInt()).coerceIn(0, maxVolume)
+                        // Right Side: Smooth Volume Control
+                        val volumeChange = (deltaRatio * maxVolume * sensitivity).toInt()
+                        val next = (initialVolume + volumeChange).coerceIn(0, maxVolume)
                         audioManager.setStreamVolume(AudioManager.STREAM_MUSIC, next, 0)
                         showStatus("Volume ${if (maxVolume == 0) 0 else next * 100 / maxVolume}%")
                     }
