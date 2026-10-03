@@ -1,54 +1,83 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout 
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:background="#12131A">
+    android:background="@color/symbian_bg">
 
-    <!-- Top App Bar -->
-    <com.google.android.material.card.MaterialCardView
+    <!-- Symbian Top Header Bar -->
+    <LinearLayout
+        android:id="@+id/symbianHeader"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:cardBackgroundColor="#181922"
-        app:cardCornerRadius="0dp"
-        app:cardElevation="8dp"
-        app:strokeWidth="0dp">
+        android:layout_height="50dp"
+        android:layout_alignParentTop="true"
+        android:background="@color/symbian_header_start"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingHorizontal="16dp">
 
-        <LinearLayout
-            android:layout_width="match_parent"
+        <TextView
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:gravity="center_vertical">
+            android:layout_weight="1"
+            android:text="Pro Media Player"
+            android:textColor="@color/symbian_cyan"
+            android:textSize="18sp"
+            android:textStyle="bold" />
 
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="Pro Media Player"
-                android:textColor="#FFFFFF"
-                android:textSize="20sp"
-                android:textStyle="bold"
-                android:padding="18dp" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="[S60]"
+            android:textColor="@color/symbian_white"
+            android:textSize="12sp"
+            android:textStyle="bold" />
+    </LinearLayout>
 
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/buttonAbout"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="About"
-                android:textAllCaps="false"
-                android:layout_marginEnd="8dp" />
-        </LinearLayout>
-    </com.google.android.material.card.MaterialCardView>
+    <View
+        android:id="@+id/headerDivider"
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:layout_below="@id/symbianHeader"
+        android:background="@color/symbian_cyan" />
 
-    <!-- Folder List -->
+    <!-- Main List View -->
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerViewFolders"
+        android:id="@+id/rvFolders"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:paddingTop="10dp"
-        android:paddingBottom="16dp"
-        android:clipToPadding="false" />
+        android:layout_above="@id/symbianSoftkeyBar"
+        android:layout_below="@id/headerDivider"
+        android:padding="6dp" />
 
-</LinearLayout>
+    <!-- Bottom Nokia Style Softkey Bar -->
+    <LinearLayout
+        android:id="@+id/symbianSoftkeyBar"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_alignParentBottom="true"
+        android:background="@color/symbian_softkey_bg"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingHorizontal="20dp">
+
+        <TextView
+            android:id="@+id/btnOptions"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Options"
+            android:textColor="@color/symbian_white"
+            android:textSize="14sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/btnExit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Exit"
+            android:textColor="@color/symbian_white"
+            android:textSize="14sp"
+            android:textStyle="bold" />
+    </LinearLayout>
+
+</RelativeLayout>
