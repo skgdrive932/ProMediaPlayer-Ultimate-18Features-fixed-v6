@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">Pro Media Player</string>
+    <string name="about_title">About Pro Media Player</string>
+    <string name="developer_name">Sk kaushal</string>
+    <string name="developer_email">skgdrive932@gmail.com</string>
+    <string name="about_message">Pro Media Player\n\nDeveloper: Sk kaushal\nGmail: skgdrive932@gmail.com\n\nA feature-rich Android media player.</string>
+</resources>
