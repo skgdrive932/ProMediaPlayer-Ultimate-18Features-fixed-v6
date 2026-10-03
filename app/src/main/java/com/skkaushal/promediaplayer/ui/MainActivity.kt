@@ -7,6 +7,7 @@ import android.os.Build
 import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.PopupMenu
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -27,15 +28,51 @@ class MainActivity : AppCompatActivity() {
 
         repository = MediaStoreRepository(this)
 
-        binding.buttonAbout.setOnClickListener { showAboutDialog() }
+        // Setup Symbian Bottom Softkeys (Options & Exit)
+        setupSymbianSoftkeys()
 
         checkPermissionsAndLoad()
     }
 
+    private fun setupSymbianSoftkeys() {
+        // Exit Softkey: App close karne ke liye
+        binding.btnExit.setOnClickListener {
+            finish()
+        }
+
+        // Options Softkey: Classic Symbian Menu Open karne ke liye
+        binding.btnOptions.setOnClickListener { view ->
+            val popup = PopupMenu(this, view)
+            popup.menu.add("Refresh Media")
+            popup.menu.add("About Symbian Player")
+            popup.menu.add("Exit")
+
+            popup.setOnMenuItemClickListener { item ->
+                when (item.title) {
+                    "Refresh Media" -> {
+                        checkPermissionsAndLoad()
+                        Toast.makeText(this, "Refreshing media...", Toast.LENGTH_SHORT).show()
+                        true
+                    }
+                    "About Symbian Player" -> {
+                        showAboutDialog()
+                        true
+                    }
+                    "Exit" -> {
+                        finish()
+                        true
+                    }
+                    else -> false
+                }
+            }
+            popup.show()
+        }
+    }
+
     private fun showAboutDialog() {
         MaterialAlertDialogBuilder(this)
-            .setTitle(R.string.about_title)
-            .setMessage(R.string.about_message)
+            .setTitle("ProMediaPlayer - S60 Edition")
+            .setMessage("Copyright (c) 2026 Sk. Kaushal\nAll Rights Reserved.\n\nClassic Symbian OS Style Media Player.")
             .setPositiveButton("OK", null)
             .show()
     }
@@ -63,8 +100,9 @@ class MainActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
-        binding.recyclerViewFolders.layoutManager = LinearLayoutManager(this)
-        binding.recyclerViewFolders.adapter = adapter
+        // Using Symbian Layout RecyclerView ID (rvFolders)
+        binding.rvFolders.layoutManager = LinearLayoutManager(this)
+        binding.rvFolders.adapter = adapter
     }
 
     override fun onRequestPermissionsResult(
