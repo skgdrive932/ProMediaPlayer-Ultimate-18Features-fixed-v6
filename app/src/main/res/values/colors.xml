@@ -1,4 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="black">#000000</color>
-    <color name="white">#FFFFFF</color>
+    <!-- Symbian Classic Theme Colors -->
+    <color name="symbian_bg">#0B131D</color>            <!-- Deep Navy Background -->
+    <color name="symbian_header_start">#003366</color>  <!-- Nokia Dark Blue -->
+    <color name="symbian_header_end">#001122</color>    <!-- Deep Blue Gradient End -->
+    <color name="symbian_cyan">#00D2FF</color>          <!-- Classic Text & Selection Cyan -->
+    <color name="symbian_white">#FFFFFF</color>         
+    <color name="symbian_item_bg">#121F2D</color>       <!-- Retro Row Background -->
+    <color name="symbian_border">#1E354D</color>        <!-- Border Line Color -->
+    <color name="symbian_softkey_bg">#070D14</color>    <!-- Bottom Softkey Bar -->
 </resources>
