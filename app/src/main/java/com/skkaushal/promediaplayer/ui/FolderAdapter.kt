@@ -3,6 +3,7 @@ package com.skkaushal.promediaplayer.ui
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.skkaushal.promediaplayer.R
 import com.skkaushal.promediaplayer.databinding.ItemFolderBinding
 import com.skkaushal.promediaplayer.model.FolderModel
 
@@ -26,10 +27,16 @@ class FolderAdapter(
     override fun onBindViewHolder(holder: FolderViewHolder, position: Int) {
         val folder = folderList[position]
 
+        // Folder name set karna
         holder.binding.tvFolderName.text = folder.name
-        holder.binding.tvFileCount.text = "${folder.mediaList.size} Files"
 
-        // Full Card Root Click Listener
+        // File count mapping (Symbian item_folder.xml ke ID ke hisab se)
+        holder.binding.tvItemCount.text = "${folder.mediaList.size} Files"
+
+        // Retro Symbian 3D Icon set karna
+        holder.binding.imgFolderIcon.setImageResource(R.drawable.bg_icon_3d)
+
+        // Item click listener
         holder.binding.root.setOnClickListener {
             onFolderClick(folder)
         }
